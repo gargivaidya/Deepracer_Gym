@@ -419,19 +419,6 @@ def start():
 				else:
 					action = agent.select_action(state)  # Sample action from policy
 
-				if len(memory) > args.batch_size:
-					# Number of updates per step in environment
-					for i in range(args.updates_per_step):
-						# Update parameters of all the networks
-						critic_1_loss, critic_2_loss, policy_loss, ent_loss, alpha = agent.update_parameters(memory, args.batch_size, updates)
-
-						writer.add_scalar('loss/critic_1', critic_1_loss, updates)
-						writer.add_scalar('loss/critic_2', critic_2_loss, updates)
-						writer.add_scalar('loss/policy', policy_loss, updates)
-						writer.add_scalar('loss/entropy_loss', ent_loss, updates)
-						writer.add_scalar('entropy_temprature/alpha', alpha, updates)
-						updates += 1
-
 				next_state, reward, done, _ = env.step(action) # Step
 				# print("Step Time: ",time.time()-start_time,end='\r')
 				if (reward > 9) and (episode_steps > 1): #Count the number of times the goal is reached
@@ -450,9 +437,23 @@ def start():
 				memory.push(state, action, reward, next_state, mask) # Append transition to memory
 
 				state = next_state
+				
+			if len(memory) > args.batch_size:
+				# Number of updates per step in environment
+				for i in range(args.updates_per_step):
+					# Update parameters of all the networks
+					critic_1_loss, critic_2_loss, policy_loss, ent_loss, alpha = agent.update_parameters(memory, args.batch_size, updates)
+
+					writer.add_scalar('loss/critic_1', critic_1_loss, updates)
+					writer.add_scalar('loss/critic_2', critic_2_loss, updates)
+					writer.add_scalar('loss/policy', policy_loss, updates)
+					writer.add_scalar('loss/entropy_loss', ent_loss, updates)
+					writer.add_scalar('entropy_temprature/alpha', alpha, updates)
+					updates += 1
 
 			if total_numsteps > args.num_steps:
 				break
+				
 
 			if (episode_steps > 1):
 				writer.add_scalar('reward/train', episode_reward, i_episode)
