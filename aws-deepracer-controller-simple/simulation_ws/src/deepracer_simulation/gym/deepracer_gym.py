@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*- 
 import rospy
 import time
 from std_msgs.msg import Bool
@@ -6,21 +7,14 @@ from std_msgs.msg import Float32
 from std_msgs.msg import Float64
 from ackermann_msgs.msg import AckermannDriveStamped
 from gazebo_msgs.msg import ModelStates
-#import tf
 from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import LaserScan
-#from cvxpy import *
-#import cvxpy as cp
 import numpy as np
 import matplotlib.pyplot as plt
 import math
 import gym
 from gym import spaces
 from std_srvs.srv import Empty
-
-# from stable_baselines.common.env_checker import check_env
-# from stable_baselines.td3.policies import MlpPolicy
-# from stable_baselines import SAC,TD3
 import argparse
 import datetime
 import itertools
@@ -28,13 +22,9 @@ import torch, gc
 gc.collect()
 
 from sac import SAC
-# from torch.utils.tensorboard import SummaryWriter
 from replay_memory import ReplayMemory
 from torch.utils.tensorboard import SummaryWriter
 from IPython.display import display
-# from stable_baselines3 import SAC
-# from stable_baselines3.sac import MlpPolicy
-
 
 parser = argparse.ArgumentParser(description='PyTorch Soft Actor-Critic Args')
 parser.add_argument('--policy', default="Gaussian",
