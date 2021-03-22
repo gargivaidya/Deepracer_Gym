@@ -24,7 +24,6 @@ gc.collect()
 from sac import SAC
 from replay_memory import ReplayMemory
 from torch.utils.tensorboard import SummaryWriter
-from IPython.display import display
 
 parser = argparse.ArgumentParser(description='PyTorch Soft Actor-Critic Args')
 parser.add_argument('--policy', default="Gaussian",
@@ -62,9 +61,11 @@ parser.add_argument('--cuda',type=int, default=0, metavar='N',
 					help='run on CUDA (default: False)')
 parser.add_argument('--max_episode_length', type=int, default=3000, metavar='N',
 					help='max episode length (default: 3000)')
+parser.add_argument('--train', type=bool, default=True,
+					help='Training or Evaluation')
 args = parser.parse_args()
 
-x_pub = rospy.Publisher('/vesc/low_level/ackermann_cmd_mux/output',AckermannDriveStamped,queue_size=1)
+x_pub = rospy.Publisher('/vesc/low_level/ackermann_cmd_mux/output', AckermannDriveStamped,queue_size=1)
 pos = [0,0]
 yaw_car = 0
 MAX_VEL = 10.
